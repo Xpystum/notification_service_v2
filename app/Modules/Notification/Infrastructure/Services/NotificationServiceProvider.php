@@ -18,12 +18,12 @@ class NotificationServiceProvider extends ServiceProvider
 
         if($this->app->runningInConsole()){
 
-            $this->loadMigrationsFrom(dirname(__DIR__) . '/Database' . '/Migrations');
+            $this->loadMigrationsFrom(dirname(__DIR__) . '/..' . '/Database' . '/Migrations');
+
 
             $this->commands([
                 MakeNotificationMethodCommand::class,
             ]);
-
         }
 
     }

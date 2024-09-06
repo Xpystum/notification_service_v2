@@ -1,11 +1,11 @@
 <?php
-namespace App\Modules\Notification\Infrastructure\Repositories\EmailList;
+namespace App\Modules\Notification\Infrastructure\Repositories\PhoneList;
 
-use App\Modules\Notification\App\Actions\List\CreateEmailListAction;
-use App\modules\Notification\App\Models\EmailList as Model;
+use App\Modules\Notification\App\Actions\List\CreatePhoneListAction;
+use App\modules\Notification\App\Models\PhoneList as Model;
 use App\Modules\Notification\Infrastructure\Repositories\Base\CoreRepository;
 
-class EmailListRepository extends CoreRepository //implements IRepository
+class PhoneListRepository extends CoreRepository //implements IRepository
 {
     protected function getModelClass()
     {
@@ -19,7 +19,7 @@ class EmailListRepository extends CoreRepository //implements IRepository
 
     public function save(string $email)
     {
-        return CreateEmailListAction::make($email);
+        return CreatePhoneListAction::make($email);
     }
 
     public function getById(string $uuid) : ?Model
@@ -27,9 +27,9 @@ class EmailListRepository extends CoreRepository //implements IRepository
         return $this->query()->find($uuid);
     }
 
-    public function getByEmail(string $uuid) : ?Model
+    public function getByPhone(string $uuid) : ?Model
     {
-        return $this->query()->where('email', $uuid)->first();
+        return $this->query()->where('phone', $uuid)->first();
     }
 
     /**
@@ -38,10 +38,10 @@ class EmailListRepository extends CoreRepository //implements IRepository
      *
      * @return [type]
      */
-    public function getByEmailStatusFalse(string $data) : bool
+    public function getByPhoneStatusFalse(string $data) : bool
     {
         $count = $this->query()
-            ->where('email' , $data)
+            ->where('phone' , $data)
             ->where('status' , false)
             ->count();
 

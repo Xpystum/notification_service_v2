@@ -10,12 +10,36 @@ use App\Modules\Notification\Action\GetMethodAction;
 use App\Modules\Notification\Action\SelectSendNotificationAction;
 use App\Modules\Notification\Action\SendNotificationAction;
 use App\Modules\Notification\Action\UpdateNotificationAction;
+use App\Modules\Notification\App\Interactor\Service\EntityNotificationEmailInteractor;
+use App\Modules\Notification\App\Interactor\Service\EntityNotificationPhoneInteractor;
+use App\modules\Notification\App\Models\EmailList;
 use App\Modules\Notification\Drivers\Factory\NotificationDriverFactory;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
 use App\Modules\Notification\Interface\NotificationDriverInterface;
 
 class NotificationService
 {
+
+
+    /**
+     * Создание записи в таблицах email и проверка на уникальность
+     * @param string $data
+     *
+     * @return ?EmailList
+     */
+    public function EntityNotifyEmail(string $data) : ?EmailList
+    {
+        return EntityNotificationEmailInteractor::make($data);
+    }
+
+    /**
+    * Создание записи в таблицах phone и проверка на уникальность
+    * @return [type]
+    */
+    public function EntityNotifyPhone(string $data)
+    {
+        return EntityNotificationPhoneInteractor::make($data);
+    }
 
     #TODO Лучше не устанавливать драйвер непосредственно в сервес - в будущем могут быть проблемы - сделал для удобства.
     // private ?NotificationDriverInterface $driver = null;

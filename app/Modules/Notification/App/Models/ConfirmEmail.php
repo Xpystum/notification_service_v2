@@ -10,4 +10,5 @@ class ConfirmEmail extends Model
     use HasFactory;
 
     protected $table = 'confirm_email_notification';
+
 }

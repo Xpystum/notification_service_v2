@@ -24,6 +24,7 @@ class SmtpDriver extends BaseDriver implements NotificationDriverInterface
     */
     public function send(BaseDto $dto) : void
     {
+        
 
         if ($dto instanceof SmtpDTO) {
             event(new SendNotificationEvent($dto, $this->getMethodDriver()));

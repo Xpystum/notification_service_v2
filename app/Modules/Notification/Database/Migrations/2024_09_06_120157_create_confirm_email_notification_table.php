@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('confirm_email_notification', function (Blueprint $table) {
             $table->uuid('id')->primary(); // Используем UUID как первичный ключ
-            $table->string('email')->unique()->comment('Номер телефона');
+
+            // $table->foreign('uuid_active') // Устанавливаем внешний ключ
+            //     ->references('id') // Ссылаемся на столбец id другой таблицы
+            //     ->on('send_email_notification'); // Указываем имя связанной таблицы
+
+            $table->uuid('uuid_send') // Добавляем столбец uuid_active
+                  ->constrained('send_email_notification', 'id');
+
             $table->string('code')->index()->comment('Введённый код пользователем');
             $table->boolean('confirm')->index()->comment('Статус подтрвеждения кода');
             $table->timestamps();

@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Notification\App\Action\List;
+namespace App\Modules\Notification\App\Actions\List;
 
 use App\modules\Notification\App\Models\EmailList;
 
@@ -14,9 +14,12 @@ class CreateEmailListAction
     public function run(string $email) : EmailList
     {
         $model = EmailList::query()
-                ->create([
-                    'email' => $email
-                ]);
+                ->firstOrCreate([
+                    'email' => $email,
+                    ], [
+                    'email' => $email,
+                    ]
+                );
 
         return $model;
     }
