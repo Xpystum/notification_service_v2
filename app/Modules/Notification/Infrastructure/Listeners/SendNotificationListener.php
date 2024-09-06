@@ -9,7 +9,7 @@ use App\Modules\Notification\Enums\ActiveStatusEnum;
 use App\Modules\Notification\Events\SendNotificationEvent;
 use App\Modules\Notification\Models\Notification;
 use App\Modules\Notification\Notify\SendMessageSmtpNotification;
-use App\Modules\Notification\Services\NotificationService;
+
 use App\Models\User;
 use App\Modules\User\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;

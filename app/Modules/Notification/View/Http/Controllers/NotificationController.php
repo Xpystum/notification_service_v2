@@ -4,7 +4,7 @@ namespace App\Modules\Notification\View\Http\Controllers;
 
 use App\Modules\Notification\DTO\AeroDTO;
 use App\Modules\Notification\DTO\Phone\AeroPhoneDTO;
-use App\Modules\Notification\Services\NotificationService;
+
 use App\Modules\Notification\Models\NotificationMethod;
 use App\Models\User;
 

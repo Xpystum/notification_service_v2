@@ -1,6 +1,6 @@
 <?php
+namespace App\Modules\Notification\App\Commands;
 
-namespace App\Modules\Notification\Console\Commands;
 
 
 use App\Modules\Notification\Enums\MethodNotificationEnum;

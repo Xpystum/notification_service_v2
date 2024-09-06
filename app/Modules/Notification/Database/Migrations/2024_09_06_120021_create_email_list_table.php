@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notification_methods', function (Blueprint $table) {
+        Schema::create('email_list', function (Blueprint $table) {
 
-            $table->id();
+            $table->uuid('id')->primary(); // Используем UUID как первичный ключ
+            $table->string('email')->unique()->comment('Почта');
+            $table->boolean('status')->default(false)->comment('Статус активации');
             $table->timestamps();
-
-            $table->string('name');
-            $table->string('driver');
-            $table->boolean('active');
 
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notification_methods');
+        Schema::dropIfExists('email_list');
     }
 };

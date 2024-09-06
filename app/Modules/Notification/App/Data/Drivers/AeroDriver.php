@@ -9,7 +9,7 @@ use App\Modules\Notification\DTO\Config\AeroConfigDTO;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
 use App\Modules\Notification\Events\SendNotificationEvent;
 use App\Modules\Notification\Interface\NotificationDriverInterface;
-use App\Modules\Notification\Services\NotificationService;
+
 
 class AeroDriver extends BaseDriver implements NotificationDriverInterface
 {

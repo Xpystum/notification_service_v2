@@ -2,7 +2,7 @@
 
 namespace App\Modules\Notification\Traits;
 
-use App\Modules\Notification\Services\NotificationService;
+
 
 trait SetTraitNotificationService
 {

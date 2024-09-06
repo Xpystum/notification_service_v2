@@ -6,7 +6,7 @@ use App\Modules\Notification\DTO\AeroDTO;
 use App\Modules\Notification\DTO\Phone\AeroPhoneDTO;
 use App\Modules\Notification\DTO\PhoneOrEmailDTO;
 use App\Modules\Notification\DTO\SmtpDTO;
-use App\Modules\Notification\Services\NotificationService;
+
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
