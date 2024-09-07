@@ -2,10 +2,10 @@
 
 namespace App\Modules\Notification\Drivers\Factory;
 
-use App\Modules\Notification\Drivers\AeroDriver;
-use App\Modules\Notification\Drivers\SmtpDriver;
+use App\Modules\Notification\App\Data\Drivers\AeroDriver;
+use App\Modules\Notification\App\Data\Drivers\SmtpDriver;
+use App\Modules\Notification\App\Interface\NotificationDriverInterface;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
 use InvalidArgumentException;
 
 class NotificationDriverFactory

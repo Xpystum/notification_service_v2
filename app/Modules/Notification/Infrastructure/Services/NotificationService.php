@@ -1,21 +1,13 @@
 <?php
 namespace App\Modules\Notification\Infrastructure\Services;
 
-
-use App\Modules\Notification\Action\CheckNotificationAction;
-use App\Modules\Notification\Action\CompleteNotificationAction;
-use App\Modules\Notification\Action\CreateNotificationAction;
-use App\Modules\Notification\Action\ExpiredNotificationAction;
-use App\Modules\Notification\Action\GetMethodAction;
-use App\Modules\Notification\Action\SelectSendNotificationAction;
-use App\Modules\Notification\Action\SendNotificationAction;
-use App\Modules\Notification\Action\UpdateNotificationAction;
+use App\Modules\Notification\App\Actions\SendNotificationAction;
 use App\Modules\Notification\App\Interactor\Service\EntityNotificationEmailInteractor;
 use App\Modules\Notification\App\Interactor\Service\EntityNotificationPhoneInteractor;
+use App\Modules\Notification\App\Interface\NotificationDriverInterface;
 use App\modules\Notification\App\Models\EmailList;
 use App\Modules\Notification\Drivers\Factory\NotificationDriverFactory;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
 
 class NotificationService
 {
@@ -42,17 +34,17 @@ class NotificationService
     }
 
     #TODO Лучше не устанавливать драйвер непосредственно в сервес - в будущем могут быть проблемы - сделал для удобства.
-    // private ?NotificationDriverInterface $driver = null;
+    private ?NotificationDriverInterface $driver = null;
 
-    // public function driverNotNull() : bool
-    // {
-    //     return $this->driver ? true : false;
-    // }
+    public function driverNotNull() : bool
+    {
+        return $this->driver ? true : false;
+    }
 
-    // public function getDriver() : ?NotificationDriverInterface
-    // {
-    //     return $this->driver;
-    // }
+    public function getDriver() : ?NotificationDriverInterface
+    {
+        return $this->driver;
+    }
 
     // public function setDriver(NotificationDriverEnum|string $driver) : static
     // {
@@ -60,17 +52,17 @@ class NotificationService
     //     return $this;
     // }
 
-    // /**
-    //  * Фабрика создание driver - создаёт драйвер (классом и настройками) - который мы прислали в параметре
-    //  *
-    //  * @param NotificationDriverEnum|string $driver
-    //  *
-    //  * @return NotificationDriverInterface
-    //  */
-    // public function getDriverFactory(NotificationDriverEnum|string $driver): NotificationDriverInterface
-    // {
-    //     return app(NotificationDriverFactory::class)->make($driver);
-    // }
+    /**
+     * Фабрика создание driver - создаёт драйвер (классом и настройками) - который мы прислали в параметре
+     *
+     * @param NotificationDriverEnum|string $driver
+     *
+     * @return NotificationDriverInterface
+     */
+    public function getDriverFactory(NotificationDriverEnum|string $driver): NotificationDriverInterface
+    {
+        return app(NotificationDriverFactory::class)->make($driver);
+    }
 
     // /**
     //  * Возвращает модель NotificationMethod по названию и драйверу
@@ -106,14 +98,14 @@ class NotificationService
 
     // // }
 
-    // /**
-    //  * Запускает метод нотификации в зависимости от драйвера
-    //  * @return SendNotificationAction
-    //  */
-    // public function sendNotification() : SendNotificationAction
-    // {
-    //     return new SendNotificationAction($this);
-    // }
+    /**
+     * Запускает метод нотификации в зависимости от драйвера
+     * @return SendNotificationAction
+     */
+    public function sendNotification() : SendNotificationAction
+    {
+        return new SendNotificationAction($this);
+    }
 
     // /**
     //  * Проверят подлинность отправленного кода пользователю
@@ -124,10 +116,10 @@ class NotificationService
     //     return app(CheckNotificationAction::class);
     // }
 
-    // /**
-    //  * вызов метода send и его логики в зависимости от метода
-    //  * @return [type]
-    //  */
+    /**
+     * вызов метода send и его логики в зависимости от метода
+     * @return [type]
+     */
     // public function selectSendNotification() : SelectSendNotificationAction
     // {
     //     return new SelectSendNotificationAction($this);

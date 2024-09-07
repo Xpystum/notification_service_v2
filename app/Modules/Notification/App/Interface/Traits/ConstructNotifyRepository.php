@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Modules\Notification\Traits;
+namespace App\Modules\Notification\App\Interface\Traits;
 
 use App\Modules\Notification\Repositories\NotificationRepository;
 

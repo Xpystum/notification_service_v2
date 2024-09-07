@@ -1,10 +1,8 @@
 <?php
+namespace App\Modules\Notification\App\Data\DTO;
 
-namespace App\Modules\Notification\DTO;
-
-
-use App\Modules\Notification\DTO\Base\BaseDTO;
 use App\Models\User;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 
 class SmtpDTO extends BaseDTO
 {

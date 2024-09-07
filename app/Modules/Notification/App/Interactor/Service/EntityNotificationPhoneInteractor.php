@@ -18,11 +18,11 @@ class EntityNotificationPhoneInteractor
     }
 
     /**
-     * Логика на проверку существование такой записи при подтверждении по коду
-     * @param string $data
-     *
-     * @return EmailList|null
-     */
+    * Логика на проверку существование такой записи при подтверждении по коду
+    * @param string $data
+    *
+    * @return EmailList|null
+    */
     public function run(string $data) : ?PhoneList
     {
         if($this->logicIf($data))

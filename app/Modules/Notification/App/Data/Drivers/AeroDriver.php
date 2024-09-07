@@ -1,14 +1,7 @@
 <?php
 
-namespace App\Modules\Notification\Drivers;
+namespace App\Modules\Notification\App\Data\Drivers;
 
-use App\Modules\Notification\Drivers\Base\BaseDriver;
-use App\Modules\Notification\DTO\AeroDTO;
-use App\Modules\Notification\DTO\Base\BaseDto;
-use App\Modules\Notification\DTO\Config\AeroConfigDTO;
-use App\Modules\Notification\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Events\SendNotificationEvent;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
 
 
 class AeroDriver extends BaseDriver implements NotificationDriverInterface

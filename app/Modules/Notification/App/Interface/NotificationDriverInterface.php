@@ -1,11 +1,10 @@
 <?php
+namespace App\Modules\Notification\App\Interface;
 
-namespace App\Modules\Notification\Interface;
-
-use App\Modules\Notification\DTO\Base\BaseDto;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 
 interface NotificationDriverInterface
 {
-    public function send(BaseDto $dto) : void;
+    public function send(BaseDTO $dto) : void;
     public function getNameString() : string;
 }

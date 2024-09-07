@@ -1,11 +1,9 @@
 <?php
+namespace App\Modules\Notification\App\Data\DTO;
 
-namespace App\Modules\Notification\DTO;
-
-
-use App\Modules\Notification\DTO\Base\BaseDTO;
-use App\Modules\Notification\DTO\Phone\AeroPhoneDTO;
 use App\Models\User;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\Phone\AeroPhoneDTO;
 
 class AeroDTO extends BaseDTO
 {

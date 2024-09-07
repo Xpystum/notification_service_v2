@@ -1,8 +1,7 @@
 <?php
+namespace App\Modules\Notification\App\Data\DTO;
 
-namespace App\Modules\Notification\DTO;
-
-use App\Modules\Notification\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\Enums\MethodNotificationEnum;
 
 /**

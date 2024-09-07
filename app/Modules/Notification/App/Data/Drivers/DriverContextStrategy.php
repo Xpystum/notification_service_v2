@@ -1,9 +1,8 @@
 <?php
+namespace App\Modules\Notification\App\Data\Drivers;
 
-namespace App\Modules\Notification\Drivers;
-
-use App\Modules\Notification\DTO\Base\BaseDto;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Interface\NotificationDriverInterface;
 
 class DriverContextStrategy
 {
@@ -19,7 +18,7 @@ class DriverContextStrategy
         $this->strategy = $strategy;
     }
 
-    public function send(BaseDto $dto) : void
+    public function send(BaseDTO $dto) : void
     {
         $this->strategy->send($dto);
 

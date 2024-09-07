@@ -1,14 +1,12 @@
 <?php
+namespace App\Modules\Notification\App\Data\Drivers;
 
-namespace App\Modules\Notification\Drivers;
-
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\SmtpDTO;
+use App\Modules\Notification\App\Interface\NotificationDriverInterface;
 use App\Modules\Notification\Drivers\Base\BaseDriver;
-use App\Modules\Notification\DTO\Base\BaseDto;
-use App\Modules\Notification\DTO\SmtpDto;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Events\SendNotificationEvent;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
-
+use App\Modules\Notification\Infrastructure\Services\NotificationService;
 
 class SmtpDriver extends BaseDriver implements NotificationDriverInterface
 {
@@ -22,12 +20,14 @@ class SmtpDriver extends BaseDriver implements NotificationDriverInterface
     /**
     * @param SmtpDTO $dto
     */
-    public function send(BaseDto $dto) : void
+    public function send(BaseDTO $dto) : void
     {
-        
+
 
         if ($dto instanceof SmtpDTO) {
-            event(new SendNotificationEvent($dto, $this->getMethodDriver()));
+
+            //event(new SendNotificationEvent($dto, $this->getMethodDriver()));
+
         } else {
             throw new \InvalidArgumentException("Invalid DTO type");
         }

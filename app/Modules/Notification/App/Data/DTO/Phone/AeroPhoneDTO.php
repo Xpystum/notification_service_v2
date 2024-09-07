@@ -1,6 +1,6 @@
 <?php
+namespace App\Modules\Notification\App\Data\DTO\Phone;
 
-namespace App\Modules\Notification\DTO\Phone;
 
 class AeroPhoneDTO
 {

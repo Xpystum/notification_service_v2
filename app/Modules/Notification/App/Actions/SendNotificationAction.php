@@ -1,13 +1,10 @@
 <?php
+namespace App\Modules\Notification\App\Actions;
 
-namespace App\Modules\Notification\Action;
-
-use App\Models\User;
-use App\Modules\Notification\Drivers\DriverContextStrategy;
-use App\Modules\Notification\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\Drivers\DriverContextStrategy;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Interface\NotificationDriverInterface;
-
+use App\Modules\Notification\Infrastructure\Services\NotificationService;
 use InvalidArgumentException;
 
 
