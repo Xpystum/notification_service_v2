@@ -1,11 +1,12 @@
 <?php
 namespace App\Modules\Notification\App\Data\Drivers;
 
+use App\Modules\Notification\App\Data\Drivers\Base\BaseDriver;
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\DTO\SmtpDTO;
+use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
 use App\Modules\Notification\App\Interface\NotificationDriverInterface;
-use App\Modules\Notification\Drivers\Base\BaseDriver;
-use App\Modules\Notification\Enums\NotificationDriverEnum;
+use App\Modules\Notification\Infrastructure\Jobs\EmailNotificationJobs;
 use App\Modules\Notification\Infrastructure\Services\NotificationService;
 
 class SmtpDriver extends BaseDriver implements NotificationDriverInterface
@@ -22,12 +23,9 @@ class SmtpDriver extends BaseDriver implements NotificationDriverInterface
     */
     public function send(BaseDTO $dto) : void
     {
-
-
         if ($dto instanceof SmtpDTO) {
-
-            //event(new SendNotificationEvent($dto, $this->getMethodDriver()));
-
+            dd(1);
+            dispatch(new EmailNotificationJobs($dto));
         } else {
             throw new \InvalidArgumentException("Invalid DTO type");
         }

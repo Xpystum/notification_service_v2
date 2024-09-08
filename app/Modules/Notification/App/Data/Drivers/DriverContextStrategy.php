@@ -6,7 +6,7 @@ use App\Modules\Notification\App\Interface\NotificationDriverInterface;
 
 class DriverContextStrategy
 {
-    private $strategy;
+    private NotificationDriverInterface $strategy;
 
     public function __construct(NotificationDriverInterface $strategy)
     {

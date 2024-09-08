@@ -1,11 +1,9 @@
 <?php
+namespace App\Modules\Notification\App\Data\Drivers\Base;
 
-namespace App\Modules\Notification\Drivers\Base;
-
-use App\Modules\Notification\Enums\NotificationDriverEnum;
+use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
+use App\Modules\Notification\Infrastructure\Services\NotificationService;
 use App\Modules\Notification\Models\NotificationMethod;
-
-
 
 abstract class BaseDriver
 {

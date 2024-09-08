@@ -3,16 +3,16 @@ namespace App\Modules\Notification\App\Actions;
 
 use App\Modules\Notification\App\Data\Drivers\DriverContextStrategy;
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
-use App\Modules\Notification\Enums\NotificationDriverEnum;
+use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
 use App\Modules\Notification\Infrastructure\Services\NotificationService;
 use InvalidArgumentException;
 
 
-class SendNotificationAction
+class SendNotificationDriverAction
 {
     //лучше сделать разделение по Action на отправку email и phone, что бы не смешивать логику и была более гибкая настройка отправки под каждый метод нотификации
-    private ?string $typeDriver = null;
     private readonly BaseDTO $dto;
+    private readonly string $driver;
 
     public function __construct(
 
@@ -20,9 +20,9 @@ class SendNotificationAction
 
     ) { }
 
-    public function typeDriver(string $typeDriver){
-
-        $this->typeDriver = strtolower($typeDriver);
+    public function driver(string $driver)
+    {
+        $this->driver = $driver;
 
         return $this;
     }
@@ -36,39 +36,26 @@ class SendNotificationAction
 
     public function run()
     {
-        $driver = null;
-
-        if($this->typeDriver == null)
+        if($this->driver == null)
         {
-            try {
-
-                $driver = $this->notifyService->getDriver()->getNameString();
-
-            } catch (\Throwable $errors) {
-
-                throw new InvalidArgumentException(
-                    "Драйвер у notification service [{$this->typeDriver}] не был указан.", 500
-                );
-
-            }
-
-        } else {
-            $driver = $this->typeDriver;
+            info('Не указан драйвер при NotificationSend');
+            throw new InvalidArgumentException(
+                "Драйвер [Notification] не был указан.", 500
+            );
         }
 
-
         //использования паттерна стратегии для выбора логики драйвера
-        switch($driver){
+        switch($this->driver){
 
             case 'smtp':
             {
-                $enum = NotificationDriverEnum::objectByName($driver);
+                $enum = NotificationDriverEnum::objectByName('smtp');
                 return $this->driverContextStrategy($enum);
             }
 
             case 'aero':
             {
-                $enum = NotificationDriverEnum::objectByName($driver);
+                $enum = NotificationDriverEnum::objectByName('aero');
                 return $this->driverContextStrategy($enum);
             }
 
@@ -76,7 +63,7 @@ class SendNotificationAction
             {
                 info('Не поддерживаемый драйвер при send notification');
                 throw new InvalidArgumentException(
-                    "Драйвер [{$this->typeDriver}] не поддерживается", 500
+                    "Драйвер [Notification] не поддерживается", 500
                 );
             }
 
@@ -85,21 +72,8 @@ class SendNotificationAction
 
     private function driverContextStrategy(NotificationDriverEnum $enum) : bool
     {
-        /**
-        * @var NotificationDriverInterface
-        */
 
-        if($this->notifyService->driverNotNull())
-        {
-
-            $driver = $this->notifyService->getDriver();
-
-        } else {
-
-            $driver = $this->notifyService->getDriverFactory($enum);
-
-        }
-
+        $driver = $this->notifyService->getDriverFactory($enum);
 
         $context = new DriverContextStrategy($driver);
         $context->send($this->dto);

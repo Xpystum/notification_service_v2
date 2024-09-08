@@ -1,23 +1,20 @@
 <?php
 namespace App\Modules\Notification\App\Data\DTO;
 
-use App\Models\User;
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
-use App\Modules\Notification\App\Data\DTO\Phone\AeroPhoneDTO;
 
 class AeroDTO extends BaseDTO
 {
-    public User $user;
-    public AeroPhoneDTO $phoneData;
 
-    public function __construct(User $user, AeroPhoneDTO $phoneData)
+    public function __construct(
+        public readonly string $phone
+    ) { }
+
+    public static function make($phone) : self
     {
-        $this->user = $user;
-        $this->phoneData = $phoneData;
+        return new self(
+            phone: $phone
+        );
     }
 
-    public function getUser() : User
-    {
-        return $this->user;
-    }
 }

@@ -1,7 +1,8 @@
 <?php
 namespace App\Modules\Notification\Infrastructure\Jobs;
 
-use App\Models\User;
+
+use App\Modules\Notification\App\Data\DTO\SmtpDTO;
 use App\Modules\Notification\Events\SendNotificationEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class PhoneNotificationJobs implements ShouldQueue
+class EmailNotificationJobs implements ShouldQueue
 {
     use Queueable;
 
@@ -19,14 +20,13 @@ class PhoneNotificationJobs implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private User $user
-    )
-    {}
+        private SmtpDTO $dto
+    ) { }
 
     /**
      * Execute the job.
      */
-    public function handle(SendNotificationEvent $event): void
+    public function handle(): void
     {
 
     }

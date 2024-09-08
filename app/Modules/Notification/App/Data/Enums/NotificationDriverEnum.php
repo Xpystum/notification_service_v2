@@ -1,6 +1,6 @@
 <?php
+namespace App\Modules\Notification\App\Data\Enums;
 
-namespace App\Modules\Notification\Enums;
 use InvalidArgumentException;
 
 enum NotificationDriverEnum: string

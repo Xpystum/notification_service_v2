@@ -1,11 +1,11 @@
 <?php
+namespace App\Modules\Notification\App\Data\Drivers\Factory;
 
-namespace App\Modules\Notification\Drivers\Factory;
 
 use App\Modules\Notification\App\Data\Drivers\AeroDriver;
 use App\Modules\Notification\App\Data\Drivers\SmtpDriver;
+use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
 use App\Modules\Notification\App\Interface\NotificationDriverInterface;
-use App\Modules\Notification\Enums\NotificationDriverEnum;
 use InvalidArgumentException;
 
 class NotificationDriverFactory

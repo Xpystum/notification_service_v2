@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Modules\Notification\Enums;
+namespace App\Modules\Notification\App\Data\Enums;
 
 use InvalidArgumentException;
 

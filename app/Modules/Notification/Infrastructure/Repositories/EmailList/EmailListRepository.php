@@ -33,10 +33,10 @@ class EmailListRepository extends CoreRepository //implements IRepository
     }
 
     /**
-     * Вернуть булев тип, если
+     * Вернуть true, если email существует и равен status:false, иначел вернуть false
      * @param string $data Телефон
      *
-     * @return [type]
+     * @return bool
      */
     public function getByEmailStatusFalse(string $data) : bool
     {

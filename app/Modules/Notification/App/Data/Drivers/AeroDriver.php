@@ -2,7 +2,13 @@
 
 namespace App\Modules\Notification\App\Data\Drivers;
 
-
+use App\Modules\Notification\App\Data\Drivers\Base\BaseDriver;
+use App\Modules\Notification\App\Data\DTO\AeroDTO;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\Config\AeroConfigDTO;
+use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
+use App\Modules\Notification\App\Interface\NotificationDriverInterface;
+use App\Modules\Notification\Infrastructure\Services\NotificationService;
 
 class AeroDriver extends BaseDriver implements NotificationDriverInterface
 {
@@ -19,10 +25,11 @@ class AeroDriver extends BaseDriver implements NotificationDriverInterface
     /**
     * @param AeroDTO $dto
     */
-    public function send(BaseDto $dto) : void
+    public function send(BaseDTO $dto) : void
     {
         if ($dto instanceof AeroDTO) {
-            event(new SendNotificationEvent($dto, $this->getMethodDriver()));
+            dd($dto);
+            // event(new SendNotificationEvent($dto, $this->getMethodDriver()));
             return;
         }
         throw new \InvalidArgumentException("Invalid DTO type");
