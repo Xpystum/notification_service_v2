@@ -2,14 +2,15 @@
 
 namespace App\modules\Notification\App\Models;
 
-use App\Modules\Notification\App\Interface\Traits\HasUuid;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EmailList extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuids;
 
     protected $table = 'email_list';
 

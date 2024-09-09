@@ -1,22 +1,45 @@
 <?php
+namespace App\Modules\Notification\App\Actions\SendAndConfirm\Send;
 
-namespace App\Modules\Notification\App\Action\SendAndConfirm\Send;
-
+use App\Modules\Notification\App\Data\DTO\Service\CreateSendAction\CreateSendDTO;
 use App\modules\Notification\App\Models\SendPhone as Model;
+
+use function App\Modules\Notification\Helpers\code;
 
 class CreateSendPhoneAction
 {
-    public static function make(string $email) : Model
+    /**
+     * @param string $email - емайл отправки
+     * @param string $driver - название драйвера
+     *
+     * @return Model
+     */
+    public static function make(CreateSendDTO $data) : Model
     {
-       return (new self())->run($email);
+       return (new self())->run($data);
     }
 
-    public function run(string $email) : Model
+    /**
+     * @param string $email
+     * @param string $driver
+     *
+     * @return Model
+     */
+    public function run(CreateSendDTO $data) : Model
     {
         $model = Model::query()
-                ->create([
-                    'email' => $email,
-                ]);
+                ->firstOrCreate(
+
+                    ['phone' => $data->value],
+
+                    [
+                        'uuid_list' => $data->uuid,
+                        'driver' => $data->driver,
+                        'phone' => $data->value,
+                        'code' => code(),
+                    ],
+
+                );
 
         return $model;
     }

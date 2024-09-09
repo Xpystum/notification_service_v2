@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('send_email_notification', function (Blueprint $table) {
 
             $table->uuid('id')->primary(); // Используем UUID как первичный ключ
-            $table->string('phone')->unique()->comment('Почта');
-            $table->string('code')->index()->comment('Код для подтверждения активации');
-            $table->timestamps();
 
+            $table->uuid('uuid_list')
+                ->constrained('email_list', 'id');
+
+            $table->string('driver')->comment('Драйвер отправки');
+            $table->string('email')->unique()->comment('Почта');
+            $table->integer('code')->index()->comment('Код для подтверждения активации');
+            $table->timestamps();
 
         });
     }

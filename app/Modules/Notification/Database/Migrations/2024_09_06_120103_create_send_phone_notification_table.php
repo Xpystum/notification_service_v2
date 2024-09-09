@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('send_phone_notification', function (Blueprint $table) {
 
             $table->uuid('id')->primary(); // Используем UUID как первичный ключ
+
+            $table->uuid('uuid_list')
+                ->constrained('phone_list', 'id');
+
+            $table->string('driver')->comment('Драйвер отправки');
             $table->string('phone')->unique()->comment('Номер телефона');
-            $table->string('code')->index()->comment('Код для подтверждения активации');
+            $table->integer('code')->index()->comment('Код для подтверждения активации');
             $table->timestamps();
 
         });

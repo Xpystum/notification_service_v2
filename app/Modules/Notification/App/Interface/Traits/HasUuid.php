@@ -16,7 +16,7 @@ trait HasUuid
         static::creating(function (Model $model){
 
             $model->forceFill([
-                'id' => (string) Uuid::uuid4(),
+                'uuid' => (string) Uuid::uuid4(),
             ]);
 
         });

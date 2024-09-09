@@ -28,7 +28,7 @@ class AeroDriver extends BaseDriver implements NotificationDriverInterface
     public function send(BaseDTO $dto) : void
     {
         if ($dto instanceof AeroDTO) {
-            dd($dto);
+
             // event(new SendNotificationEvent($dto, $this->getMethodDriver()));
             return;
         }

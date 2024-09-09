@@ -24,8 +24,7 @@ class SmtpDriver extends BaseDriver implements NotificationDriverInterface
     public function send(BaseDTO $dto) : void
     {
         if ($dto instanceof SmtpDTO) {
-            dd(1);
-            dispatch(new EmailNotificationJobs($dto));
+            // dispatch(new EmailNotificationJobs($dto));
         } else {
             throw new \InvalidArgumentException("Invalid DTO type");
         }
