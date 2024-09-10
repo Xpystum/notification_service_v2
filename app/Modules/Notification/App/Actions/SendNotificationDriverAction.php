@@ -4,7 +4,7 @@ namespace App\Modules\Notification\App\Actions;
 use App\Modules\Notification\App\Data\Drivers\DriverContextStrategy;
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
-use App\Modules\Notification\Infrastructure\Services\NotificationService;
+use App\Modules\Notification\Infrastructure\Services\Notification\NotificationSendService;
 use InvalidArgumentException;
 
 
@@ -16,7 +16,7 @@ class SendNotificationDriverAction
 
     public function __construct(
 
-        public NotificationService $notifyService
+        public NotificationSendService $notifyService
 
     ) { }
 

@@ -60,11 +60,11 @@ class InteractorSendNotification
     public function runSendEmail(SendNotificationDTO $dto) : bool
     {
         //можно сделать через hanlder
-        return DB::transaction(function ($dto) {
+        return DB::transaction(function ($connect) use ($dto) {
             $driver = $dto->driver->value;
-
             //создание list
             $model = $this->EntityNotifyEmail($dto->value);
+
 
             //создание кода для отправки (send table)
             $this->CreateSendEmail(CreateSendDTO::make(
@@ -80,7 +80,7 @@ class InteractorSendNotification
     public function runSendPhone(SendNotificationDTO $dto) : bool
     {
         //можно сделать через hanlder
-        return DB::transaction(function ($dto) {
+        return DB::transaction(function ($connect) use ($dto)  {
             $driver = $dto->driver->value;
 
             $model = $this->EntityNotifyPhone($dto->value);

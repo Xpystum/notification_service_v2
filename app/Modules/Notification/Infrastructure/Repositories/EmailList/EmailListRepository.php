@@ -27,9 +27,9 @@ class EmailListRepository extends CoreRepository //implements IRepository
         return $this->query()->find($uuid);
     }
 
-    public function getByEmail(string $uuid) : ?Model
+    public function getByEmail(string $value) : ?Model
     {
-        return $this->query()->where('email', $uuid)->first();
+        return $this->query()->where('email', $value)->first();
     }
 
     /**
