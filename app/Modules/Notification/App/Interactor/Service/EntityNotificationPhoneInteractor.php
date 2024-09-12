@@ -5,7 +5,7 @@ namespace App\Modules\Notification\App\Interactor\Service;
 use App\Modules\Notification\App\Actions\List\CreatePhoneListAction;
 use App\modules\Notification\App\Models\PhoneList;
 use App\Modules\Notification\App\Rule\PhoneNumber;
-use App\Modules\Notification\Infrastructure\Repositories\PhoneList\PhoneListRepository;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\List\PhoneList\PhoneListRepository;
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

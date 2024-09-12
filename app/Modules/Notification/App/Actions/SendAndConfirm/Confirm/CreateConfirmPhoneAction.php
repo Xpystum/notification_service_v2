@@ -21,6 +21,6 @@ class CreateConfirmPhoneAction
             ],
         );
 
-return $model;
+        return $model;
     }
 }

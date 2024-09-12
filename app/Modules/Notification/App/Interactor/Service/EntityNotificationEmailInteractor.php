@@ -4,7 +4,7 @@ namespace App\Modules\Notification\App\Interactor\Service;
 
 use App\Modules\Notification\App\Actions\List\CreateEmailListAction;
 use App\modules\Notification\App\Models\EmailList;
-use App\Modules\Notification\Infrastructure\Repositories\Notification\EmailList\EmailListRepository;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\List\EmailList\EmailListRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
