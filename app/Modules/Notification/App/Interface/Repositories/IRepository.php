@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 interface IRepository
 {
-    public function save();
-    public function getById() : Model;
+    public function save($email);
+    public function getById($uuid) : ?Model;
 }

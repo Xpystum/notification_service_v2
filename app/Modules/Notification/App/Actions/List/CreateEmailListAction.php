@@ -14,11 +14,9 @@ class CreateEmailListAction
     public function run(string $email) : EmailList
     {
         $model = EmailList::query()
-                ->firstOrCreate([
-                    'email' => $email,
-                    ], [
-                    'email' => $email,
-                    ]
+                ->firstOrCreate(
+                    ['value' => $email],
+                    ['value' => $email]
                 );
 
         return $model;

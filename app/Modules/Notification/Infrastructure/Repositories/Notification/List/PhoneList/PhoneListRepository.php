@@ -1,7 +1,8 @@
 <?php
-namespace App\Modules\Notification\Infrastructure\Repositories\PhoneList;
+namespace App\Modules\Notification\Infrastructure\Repositories\Notification\List\PhoneList;
 
 use App\Modules\Notification\App\Actions\List\CreatePhoneListAction;
+use App\Modules\Notification\App\Interface\Repositories\IRepository;
 use App\modules\Notification\App\Models\PhoneList as Model;
 use App\Modules\Notification\Infrastructure\Repositories\Base\CoreRepository;
 
@@ -29,7 +30,7 @@ class PhoneListRepository extends CoreRepository //implements IRepository
 
     public function getByPhone(string $uuid) : ?Model
     {
-        return $this->query()->where('phone', $uuid)->first();
+        return $this->query()->where('value', $uuid)->first();
     }
 
     /**
@@ -41,7 +42,7 @@ class PhoneListRepository extends CoreRepository //implements IRepository
     public function getByPhoneStatusFalse(string $data) : bool
     {
         $count = $this->query()
-            ->where('phone' , $data)
+            ->where('value' , $data)
             ->where('status' , false)
             ->count();
 

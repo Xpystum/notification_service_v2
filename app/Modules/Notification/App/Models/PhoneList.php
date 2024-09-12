@@ -12,6 +12,6 @@ class PhoneList extends Model
 
     protected $table = 'phone_list';
 
-    protected $fillable = ['phone'];
+    protected $fillable = ['value'];
 
 }

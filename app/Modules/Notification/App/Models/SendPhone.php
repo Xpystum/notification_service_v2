@@ -13,5 +13,5 @@ class SendPhone extends Model
 
     protected $table = 'send_phone_notification';
 
-    protected $fillable = ['uuid_list' ,'phone', 'driver', 'code'];
+    protected $fillable = ['uuid_list' ,'value', 'driver', 'code' , 'created_at'];
 }

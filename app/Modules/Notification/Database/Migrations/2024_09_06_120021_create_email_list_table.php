@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('email_list', function (Blueprint $table) {
 
             $table->uuid('id')->primary(); // Используем UUID как первичный ключ
-            $table->string('email')->unique()->comment('Почта');
+            $table->string('value')->unique()->comment('Почта');
             $table->boolean('status')->default(false)->comment('Статус активации');
             $table->timestamps();
 

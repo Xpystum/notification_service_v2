@@ -23,6 +23,7 @@ return new class extends Migration
         DB::table('config_notification')->insert(
             [
                 ['key' => 'blocking_time', 'value' => '10'],
+                ['key' => 'max_count_attempt_confirm', 'value' => '3'],
                 ['key' => 'confirmation_time', 'value' => '5'],
             ],
 

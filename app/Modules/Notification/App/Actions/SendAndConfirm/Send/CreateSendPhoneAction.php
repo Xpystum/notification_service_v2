@@ -30,12 +30,12 @@ class CreateSendPhoneAction
         $model = Model::query()
                 ->firstOrCreate(
 
-                    ['phone' => $data->value],
+                    ['value' => $data->value],
 
                     [
                         'uuid_list' => $data->uuid,
                         'driver' => $data->driver,
-                        'phone' => $data->value,
+                        'value' => $data->value,
                         'code' => code(),
                     ],
 

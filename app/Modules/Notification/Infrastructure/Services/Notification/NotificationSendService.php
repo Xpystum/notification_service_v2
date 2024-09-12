@@ -5,14 +5,16 @@ namespace App\Modules\Notification\Infrastructure\Services\Notification;
 use App\Modules\Notification\App\Actions\SendNotificationDriverAction;
 use App\Modules\Notification\App\Data\Drivers\Factory\NotificationDriverFactory;
 use App\Modules\Notification\App\Data\DTO\AeroDTO;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
 use App\Modules\Notification\App\Data\DTO\SmtpDTO;
 use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
 use App\Modules\Notification\App\Interface\NotificationDriverInterface;
+use App\Modules\Notification\App\Interface\Service\INotificationSend;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
-class NotificationSendService
+class NotificationSendService implements INotificationSend
 {
 
     /**
@@ -30,8 +32,9 @@ class NotificationSendService
      *
      * @return bool
      */
-    public function sendNotification(SendNotificationDTO $dto) : bool
+    public function sendNotification(BaseDTO $dto) : bool
     {
+        //P.S Если линковщик ругается на реализацию интерфейса - это баг линковщика.
         $driver = $dto->driver->value;
         switch($driver)
         {

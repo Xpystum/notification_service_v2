@@ -13,6 +13,6 @@ class SendEmail extends Model
 
     protected $table = 'send_email_notification';
 
-    protected $fillable = ['uuid_list', 'email', 'driver', 'code'];
+    protected $fillable = ['uuid_list', 'value', 'driver', 'code', 'created_at'];
 
 }

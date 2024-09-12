@@ -14,7 +14,7 @@ class EmailList extends Model
 
     protected $table = 'email_list';
 
-    protected $fillable = ['email'];
+    protected $fillable = ['value'];
 
     // public function newUniqueId(): string
     // {

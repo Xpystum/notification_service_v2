@@ -29,12 +29,27 @@ return new class extends Migration
             RETURNS TRIGGER AS $$
             DECLARE
                 code_exists BOOLEAN; -- декларируем переменную
+                emailList_uuid UUID;
             BEGIN
                 -- Проверяем, существует ли код в таблице send_email_notification
-                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code) INTO code_exists;
+                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
 
                 -- Устанавливаем значение confirm в зависимости от проверки
                 NEW.confirm := code_exists;
+
+                IF code_exists THEN
+
+                    -- получаем uuid email_list
+                    SELECT uuid_list
+                    INTO emailList_uuid
+                    FROM send_email_notification
+                    WHERE code = NEW.code AND id = NEW.uuid_send
+                    LIMIT 1;
+
+                    UPDATE email_list
+                    SET status = true
+                    WHERE id = emailList_uuid;
+                END IF;
 
                 RETURN NEW;
             END;

@@ -15,15 +15,17 @@ class CreateSendEmailAction
 
     public function run(CreateSendDTO $data) : Model
     {
+
+
         $model = Model::query()
                 ->firstOrCreate(
 
-                    ['email' => $data->value],
+                    ['value' => $data->value],
 
                     [
                         'uuid_list' => $data->uuid,
                         'driver' => $data->driver,
-                        'email' => $data->value,
+                        'value' => $data->value,
                         'code' => code(),
                     ],
 

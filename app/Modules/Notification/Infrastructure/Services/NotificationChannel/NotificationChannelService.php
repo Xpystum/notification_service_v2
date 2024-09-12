@@ -2,14 +2,18 @@
 
 namespace App\Modules\Notification\Infrastructure\Services\NotificationChannel;
 
+use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmEmailAction;
+use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmPhoneAction;
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
 use App\Modules\Notification\App\Interactor\Service\InteractorSendNotification;
+use App\Modules\Notification\App\Interface\Service\INotificationChannel;
 use App\Modules\Notification\Infrastructure\Services\Notification\NotificationSendService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class NotificationChannelService
+class NotificationChannelService implements INotificationChannel
 {
 
     public function __construct(
@@ -91,8 +95,22 @@ class NotificationChannelService
 
     }
 
-    public function runNotificationChannel(SendNotificationDTO $dto) : bool
+
+
+    /**
+     * Запуск работы нотификации по каналам (SMTP/SMS)
+     * @param SendNotificationDTO $dto
+     *
+     * @return bool
+     */
+    public function runNotificationChannel(BaseDTO $dto) : bool
     {
         return $this->InteractorSendNotification($dto);
     }
+
+    public function confirmNotificationChannel(BaseDTO $dto)
+    {
+
+    }
+
 }

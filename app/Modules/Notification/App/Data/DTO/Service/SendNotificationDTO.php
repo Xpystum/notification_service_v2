@@ -2,6 +2,7 @@
 
 namespace App\Modules\Notification\App\Data\DTO\Service;
 
+use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
 use App\Modules\Notification\App\Rule\PhoneNumber;
 use Exception;
@@ -13,7 +14,7 @@ use InvalidArgumentException;
  * @property NotificationDriverEnum $driver Имя драйвера нотификации
  * @property string $value Значение драйвера например: телефона, почта
  */
-class SendNotificationDTO
+class SendNotificationDTO extends BaseDTO
 {
 
     public readonly NotificationDriverEnum $driver;

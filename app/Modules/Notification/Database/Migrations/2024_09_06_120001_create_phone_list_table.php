@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('phone_list', function (Blueprint $table) {
 
             $table->uuid('id')->primary(); // Используем UUID как первичный ключ
-            $table->string('phone')->unique()->comment('Номер телефона');
+            $table->string('value')->unique()->comment('Номер телефона');
             $table->boolean('status')->default(false)->comment('Статус активации');
             $table->timestamps();
 
