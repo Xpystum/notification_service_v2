@@ -4,10 +4,13 @@ namespace App\Modules\Notification\Infrastructure\Repositories\Notification\List
 use App\Modules\Notification\App\Actions\List\CreateEmailListAction;
 use App\modules\Notification\App\Models\EmailList as Model;
 use App\Modules\Notification\Infrastructure\Repositories\Base\CoreRepository;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\List\TraitList;
 use Illuminate\Support\Carbon;
 
 class EmailListRepository extends CoreRepository //implements IRepository
 {
+    use TraitList;
+
     protected function getModelClass()
     {
         return Model::class;
@@ -48,24 +51,6 @@ class EmailListRepository extends CoreRepository //implements IRepository
 
         return $count ? true : false;
     }
-
-
-    /**
-     * Возвращает true, если человек ещё может отправить подтверждение кода под определённому uuid_send, если количество записей равно 3+, то false
-     * @param string $uuid
-     * @param int $cout
-     *
-     * @return bool
-     */
-    public function checkCountConfirm(string $uuid, int $count) : bool
-    {
-        $countGet = $this->query()
-                ->where('uuid_send', $uuid)
-                ->count();
-
-        return $countGet >= $count ? false : true;
-    }
-
 
 
 }

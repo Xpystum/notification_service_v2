@@ -5,9 +5,11 @@ use App\Modules\Notification\App\Actions\List\CreatePhoneListAction;
 use App\Modules\Notification\App\Interface\Repositories\IRepository;
 use App\modules\Notification\App\Models\PhoneList as Model;
 use App\Modules\Notification\Infrastructure\Repositories\Base\CoreRepository;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\List\TraitList;
 
 class PhoneListRepository extends CoreRepository //implements IRepository
 {
+    use TraitList;
     protected function getModelClass()
     {
         return Model::class;

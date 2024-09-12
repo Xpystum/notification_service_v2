@@ -17,20 +17,19 @@ trait TraitConfirm
     */
     public function confirmation_time(string $uuid, Carbon $time = null) : bool
     {
-        $valueTest = config('notification.confirmation_time');
-        is_null($valueTest) ? throw new Exception('Ошибка получение значение confirmation_time из config notification', 500) : '';
+        $confirmation_time = config('notification.confirmation_time');
+        is_null($confirmation_time) ? throw new Exception('Ошибка получение значение confirmation_time из config notification', 500) : '';
 
 
         if(is_null($time))
         {
-            $time =  Carbon::now()->subMinutes($valueTest);
+            $time =  Carbon::now()->subMinutes($confirmation_time);
         }
 
         $model = $this->query()
             ->where('id', $uuid)
             ->where('created_at', '>=', $time)
             ->first();
-
 
         return $model ? true : false;
     }
@@ -41,17 +40,20 @@ trait TraitConfirm
     *
     * @return bool Возвращает true, когда можно отправить notification спустя время указанных из config
     */
-    public function not_block_send(string $uuid) : bool
+    public function not_block_send(string $uuid, Carbon $time = null) : bool
     {
         $blocking_time = config('notification.blocking_time');
         is_null($blocking_time) ? throw new Exception('Ошибка получение значение blocking_time из config notification', 500) : '';
 
-        // Получаем текущее время
-        $now =  Carbon::now()->subMinutes($blocking_time);
+        if(is_null($time))
+        {
+            $time =  Carbon::now()->subMinutes($blocking_time);
+        }
+
 
         $model = $this->query()
-            ->where('value', $uuid)
-            ->where('created_at', '<=', $now->subMinutes(5))
+            ->where('id', $uuid)
+            ->where('created_at', '<=', $time)
             ->first();
 
         return $model ? true : false;

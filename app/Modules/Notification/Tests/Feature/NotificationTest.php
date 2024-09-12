@@ -107,50 +107,56 @@ class NotificationTest extends TestCase
     }
 
     //Repository Logic Test
+    //P.S Дата в тестах через Carbon::now() работает не парвильно - указывать придётся вручную
 
     /**
-     * Проверка отправки notification в определённый промежуток времени
-     * @return [type]
-     */
-    // public function test_repositoryEmailSend_confirmation_time()
-    // {
-    //     $modelList = CreateEmailListAction::make('test@gmail.com');
+    * Проверка отправки notification в определённый промежуток времени
+    * @return [type]
+    */
+    public function test_repositoryEmailSend_confirmation_time()
+    {
+        $modelList = CreateEmailListAction::make('test@gmail.com');
 
-    //     // Проверяем, что объект пользователя не равен null
-    //     $this->assertNotNull($modelList);
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($modelList);
 
-    //     $currentDate = now()->toDateString(); // Получаем текущую дату
+        // $currentDate = now()->toDateString(); // Получаем текущую дату
 
-    //     $model = SendEmail::query()
-    //             ->create(
-    //                 [
-    //                     'uuid_list' => $modelList->id,
-    //                     'driver' => 'email',
-    //                     'value' => $modelList->value,
-    //                     'code' => code(),
-    //                     'created_at' =>  Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate 12:30:00"),
-    //                 ],
-    //             );
-    //     // Проверяем, что объект пользователя не равен null
-    //     $this->assertNotNull($model);
-
-    //     $timeTest = "12:25:00";
-    //     $repository = new SendEmailRepository();
-    //     $status = $repository->confirmation_time($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
-
-    //     //Проверяем что мы получили true (вр)
-    //     $this->assertTrue($status);
+        Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 0, 0));
 
 
-    //     $timeTest = "12:31:00";
-    //     $repository = new SendEmailRepository();
-    //     $status = $repository->confirmation_time($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+        $model = CreateSendEmailAction::make(CreateSendDTO::make(
+            value : $modelList->value,
+            driver : 'smtp',
+            uuid : $modelList->id,
+        ));
 
-    //     //Проверяем что мы получили false (время подвеждения истекло)
-    //     $this->assertFalse($status);
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($model);
 
-    // }
+        // $timeTest = "12:25:00";
+        $repository = new SendEmailRepository();
+        $status = $repository->confirmation_time($model->id);
 
+        //Проверяем что мы получили true (вр)
+        $this->assertTrue($status);
+
+
+        // $timeTest = "12:31:00";
+        // $repository = new SendEmailRepository();
+        // $status = $repository->confirmation_time($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+
+        // //Проверяем что мы получили false (время подвеждения истекло)
+        // $this->assertFalse($status);
+
+    }
+
+    /**
+    *
+    * Проверка отправки notification в определённый промежуток времени
+    *
+    * @return void
+    */
     public function test_repositoryPhoneSend_confirmation_time()
     {
         $modelList = CreatePhoneListAction::make('79200264437');
@@ -185,6 +191,84 @@ class NotificationTest extends TestCase
         $timeTest = "12:31:00";
         $repository = new SendPhoneRepository();
         $status = $repository->confirmation_time($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+
+        //Проверяем что мы получили false (время подвеждения истекло)
+        $this->assertFalse($status);
+    }
+
+    public function test_not_block_send_email()
+    {
+        $modelList = CreateEmailListAction::make('test@gmail.com');
+
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($modelList);
+
+        $currentDate = now()->toDateString(); // Получаем текущую дату
+
+        $model = SendEmail::query()
+                ->create(
+                    [
+                        'uuid_list' => $modelList->id,
+                        'driver' => 'email',
+                        'value' => $modelList->value,
+                        'code' => code(),
+                        'created_at' =>  Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate 12:30:00"),
+                    ],
+                );
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($model);
+
+        //если время через которое надо отправить прошло
+        $timeTest = "12:31:00";
+        $repository = new SendEmailRepository();
+        $status = $repository->not_block_send($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+
+        //Проверяем что мы получили true (вр)
+        $this->assertTrue($status);
+
+        //если время через которое надо отправить ещё не прошло
+        $timeTest = "12:29:00";
+        $repository = new SendEmailRepository();
+        $status = $repository->not_block_send($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+
+        //Проверяем что мы получили false (время подвеждения истекло)
+        $this->assertFalse($status);
+    }
+
+    public function test_not_block_send_phone()
+    {
+        $modelList = CreatePhoneListAction::make('79200264437');
+
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($modelList);
+
+        $currentDate = now()->toDateString(); // Получаем текущую дату
+
+        $model = SendPhone::query()
+                ->create(
+                    [
+                        'uuid_list' => $modelList->id,
+                        'driver' => 'phone',
+                        'value' => $modelList->value,
+                        'code' => code(),
+                        'created_at' =>  Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate 12:30:00"),
+                    ],
+                );
+        // Проверяем, что объект пользователя не равен null
+        $this->assertNotNull($model);
+
+        //если время через которое надо отправить прошло
+        $timeTest = "12:31:00";
+        $repository = new SendPhoneRepository();
+        $status = $repository->not_block_send($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
+
+        //Проверяем что мы получили true (вр)
+        $this->assertTrue($status);
+
+        //если время через которое надо отправить ещё не прошло
+        $timeTest = "12:29:00";
+        $repository = new SendEmailRepository();
+        $status = $repository->not_block_send($model->id, Carbon::createFromFormat('Y-m-d H:i:s', "$currentDate $timeTest"));
 
         //Проверяем что мы получили false (время подвеждения истекло)
         $this->assertFalse($status);
