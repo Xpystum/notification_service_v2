@@ -36,12 +36,13 @@ class NotificationChannelService implements INotificationChannel
             $interactor = app(InteractorSendNotification::class);
             $status = $interactor->runSendEmail($dto);
 
-            if($status)
+            if($status['status'])
             {
 
                 $this->serviceNotification->sendNotification($dto);
                 return [
-                    'message' => 'Отправка была успешна',
+                    'uuid_send' => $status['uuid'],
+                    'message' => 'Отправка была успешна.',
                     'status' => true,
                 ];
             }
@@ -68,11 +69,12 @@ class NotificationChannelService implements INotificationChannel
             $interactor = app(InteractorSendNotification::class);
             $status = $interactor->runSendPhone($dto);
 
-            if($status)
+            if($status['status'])
             {
                 $this->serviceNotification->sendNotification($dto);
                 return [
-                    'message' => 'Отправка была успешна',
+                    'uuid_send' => $status['uuid'],
+                    'message' => 'Отправка была успешна.',
                     'status' => true,
                 ];
             }

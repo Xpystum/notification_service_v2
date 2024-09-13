@@ -13,6 +13,7 @@ use App\modules\Notification\App\Models\SendEmail;
 use App\modules\Notification\App\Models\SendPhone;
 use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendEmailRepository;
 use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendPhoneRepository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class InteractorSendNotification
@@ -88,7 +89,15 @@ class InteractorSendNotification
         return CreateSendPhoneAction::make($data);
     }
 
-    public function runSendEmail(SendNotificationDTO $dto) : bool
+    private function arrayResponse(bool $status , string $uuid = null) : array
+    {
+        return [
+            'uuid' => $uuid,
+            'status' => $status,
+        ];
+    }
+
+    public function runSendEmail(SendNotificationDTO $dto) : array
     {
         //можно сделать через hanlder
         return DB::transaction(function ($connect) use ($dto) {
@@ -107,14 +116,14 @@ class InteractorSendNotification
                     uuid: $model->id,
                 ));
 
-                return true;
+                return $this->arrayResponse(true, $model->id);
             }
 
-            return false;
+            return $this->arrayResponse(false);
         });
     }
 
-    public function runSendPhone(SendNotificationDTO $dto) : bool
+    public function runSendPhone(SendNotificationDTO $dto) : array
     {
         //можно сделать через hanlder
         return DB::transaction(function ($connect) use ($dto)  {
@@ -126,16 +135,16 @@ class InteractorSendNotification
             if($this->not_block_send_phone($model->id))
             {
                 //создание кода для отправки (send table)
-                $this->CreateSendPhone(CreateSendDTO::make(
+                $model = $this->CreateSendPhone(CreateSendDTO::make(
                     value: $model->value,
                     driver: $driver,
                     uuid: $model->id,
                 ));
 
-                return true;
+                return $this->arrayResponse(true, $model->id);
             }
 
-            return false;
+            return $this->arrayResponse(false);
         });
 
     }

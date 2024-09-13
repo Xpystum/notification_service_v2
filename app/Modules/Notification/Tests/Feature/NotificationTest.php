@@ -373,13 +373,34 @@ class NotificationTest extends TestCase
 
     }
 
+    /**
+     * Проверка на отправку нотификации
+     * @return void
+     */
     public function test_sendNotificationEmail()
     {
         $server = app(NotificationService::class);
-        $status = $server->runNotification(SendNotificationDTO::make('smtp', 'test@mail.ru'));
-        $this->assertNotNull($status);
 
-        // $this->arrayHasKey()
+        {
+            $arrayResult = $server->runNotification(SendNotificationDTO::make('smtp', 'test@mail.ru'));
+            $this->assertNotEmpty($arrayResult['uuid_send'], 'uuid_send не должен быть пустым.');
+        }
+
+    }
+
+    /**
+     * Проверка на отправку нотификации
+     * @return void
+     */
+    public function test_sendNotificationPhone()
+    {
+        $server = app(NotificationService::class);
+
+        {
+            $arrayResult = $server->runNotification(SendNotificationDTO::make('aero', '79200761195'));
+            $this->assertNotEmpty($arrayResult['uuid_send'], 'uuid_send не должен быть пустым.');
+        }
+
     }
 
     /**
@@ -456,6 +477,10 @@ class NotificationTest extends TestCase
         $this->tearDown();
     }
 
+    /**
+     * Проверка на верный/неверный код подтверждения
+     * @return void
+     */
     public function test_confirmation_code_email()
     {
         $service = app(NotificationService::class);
@@ -485,6 +510,10 @@ class NotificationTest extends TestCase
         $this->tearDown();
     }
 
+    /**
+     * Проверка на верный/неверный код
+     * @return void
+     */
     public function test_confirmation_code_phone()
     {
         $service = app(NotificationService::class);
