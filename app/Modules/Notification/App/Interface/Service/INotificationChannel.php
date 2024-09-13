@@ -5,6 +5,6 @@ use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 
 interface INotificationChannel
 {
-  
-    public function runNotificationChannel(BaseDTO $dto) : bool;
+
+    public function runNotificationChannel(BaseDTO $dto) : array;
 }

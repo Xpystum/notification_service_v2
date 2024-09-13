@@ -25,20 +25,30 @@ class NotificationChannelService implements INotificationChannel
      * Объединение логики создание записи email + создания/отправки кода
      * @param SendNotificationDTO $dto
      *
-     * @return bool
+     * @return array
      */
-    private function InteractorSendEmail(SendNotificationDTO $dto) : bool
+    private function InteractorSendEmail(SendNotificationDTO $dto) : array
     {
         return DB::transaction(function () use ($dto)
         {
             //объединение логики создание записей в интерактор send+list table
             $interactor = app(InteractorSendNotification::class);
-            $interactor->runSendEmail($dto);
+            $status = $interactor->runSendEmail($dto);
+            
+            if($status)
+            {
 
-            //логика выбора драйвера и отправка
-            $this->serviceNotification->sendNotification($dto);
+                $this->serviceNotification->sendNotification($dto);
+                return [
+                    'message' => 'Отправка была успешна',
+                    'status' => true,
+                ];
+            }
 
-            return true;
+            return [
+                'message' => 'Повторная отправка возможна через несколько минут.',
+                'status' => false,
+            ];
         });
 
     }
@@ -47,20 +57,30 @@ class NotificationChannelService implements INotificationChannel
      * Объединение логики создание записи phone + создания/отправки кода
      * @param SendNotificationDTO $dto
      *
-     * @return bool
+     * @return array
      */
-    private function InteractorSendPhone(SendNotificationDTO $dto) : bool
+    private function InteractorSendPhone(SendNotificationDTO $dto) : array
     {
         return DB::transaction(function () use ($dto)
         {
             //объединение логики создание записей в интерактор send+list table
             $interactor = app(InteractorSendNotification::class);
-            $interactor->runSendPhone($dto);
+            $status = $interactor->runSendPhone($dto);
 
-            //логика выбора драйвера и отправка через сервес нотификации
-            $this->serviceNotification->sendNotification($dto);
+            if($status)
+            {
+                $this->serviceNotification->sendNotification($dto);
+                return [
+                    'message' => 'Отправка была успешна',
+                    'status' => true,
+                ];
+            }
 
-            return true;
+            return [
+                'message' => 'Повторная отправка возможна через несколько минут.',
+                'status' => false,
+            ];
+
         });
 
     }
@@ -70,7 +90,7 @@ class NotificationChannelService implements INotificationChannel
      * Метод интерактор для объединение бизнес логики для отправки нотификации
      * @return [type]
      */
-    private function InteractorSendNotification(SendNotificationDTO $dto) : bool
+    private function InteractorSendNotification(SendNotificationDTO $dto) : array
     {
         $driver = $dto->driver->value;
 
@@ -101,9 +121,9 @@ class NotificationChannelService implements INotificationChannel
      * Запуск работы нотификации по каналам (SMTP/SMS)
      * @param SendNotificationDTO $dto
      *
-     * @return bool
+     * @return array
      */
-    public function runNotificationChannel(BaseDTO $dto) : bool
+    public function runNotificationChannel(BaseDTO $dto) : array
     {
         return $this->InteractorSendNotification($dto);
     }

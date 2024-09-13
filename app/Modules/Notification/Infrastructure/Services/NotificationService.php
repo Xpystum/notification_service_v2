@@ -16,15 +16,15 @@ class NotificationService implements INotification
      * Запуск в работы нотификации
      * @param SendNotificationDTO $dto
      *
-     * @return bool
+     * @return array
      */
-    public function runNotification(BaseDTO $dto) : bool
+    public function runNotification(BaseDTO $dto) : array
     {
         return $this->serviceNotificationChannel->runNotificationChannel($dto);
     }
 
     public function confirmNotification(BaseDTO $dto)
     {
-        
+
     }
 }

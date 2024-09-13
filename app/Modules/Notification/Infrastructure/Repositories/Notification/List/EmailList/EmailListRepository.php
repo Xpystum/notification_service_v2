@@ -9,7 +9,6 @@ use Illuminate\Support\Carbon;
 
 class EmailListRepository extends CoreRepository //implements IRepository
 {
-    use TraitList;
 
     protected function getModelClass()
     {
@@ -51,6 +50,5 @@ class EmailListRepository extends CoreRepository //implements IRepository
 
         return $count ? true : false;
     }
-
 
 }

@@ -9,7 +9,6 @@ use App\Modules\Notification\Infrastructure\Repositories\Notification\List\Trait
 
 class PhoneListRepository extends CoreRepository //implements IRepository
 {
-    use TraitList;
     protected function getModelClass()
     {
         return Model::class;
@@ -35,20 +34,5 @@ class PhoneListRepository extends CoreRepository //implements IRepository
         return $this->query()->where('value', $uuid)->first();
     }
 
-    /**
-     * Вернуть булев тип, если
-     * @param string $data Телефон
-     *
-     * @return [type]
-     */
-    public function getByPhoneStatusFalse(string $data) : bool
-    {
-        $count = $this->query()
-            ->where('value' , $data)
-            ->where('status' , false)
-            ->count();
-
-        return $count ? true : false;
-    }
 
 }

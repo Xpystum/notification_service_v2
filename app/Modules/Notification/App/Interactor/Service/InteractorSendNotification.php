@@ -10,10 +10,40 @@ use App\modules\Notification\App\Models\EmailList;
 use App\modules\Notification\App\Models\PhoneList;
 use App\modules\Notification\App\Models\SendEmail;
 use App\modules\Notification\App\Models\SendPhone;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendEmailRepository;
+use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendPhoneRepository;
 use Illuminate\Support\Facades\DB;
 
 class InteractorSendNotification
 {
+
+    public function __construct(
+        private SendEmailRepository $repositoryEmail,
+        private SendPhoneRepository $repositoryPhone,
+    ) { }
+
+
+    /**
+     * Метод проверки на возможность отправки кода email
+     * @param string $uuid
+     *
+     * @return bool - true отправка кода доступна
+     */
+    private function not_block_send_email(string $uuid) : bool
+    {
+        return $this->repositoryEmail->not_block_send($uuid);
+    }
+
+    /**
+    * Метод проверки на возможность отправки кода зрщту
+    * @param string $uuid
+    *
+    * @return bool - true отправка кода доступна
+    */
+    private function not_block_send_phone(string $uuid) : bool
+    {
+        return $this->repositoryPhone->not_block_send($uuid);
+    }
 
     /**
      * Создание записи в таблицах email и проверка на уникальность
@@ -57,23 +87,31 @@ class InteractorSendNotification
         return CreateSendPhoneAction::make($data);
     }
 
+
+
     public function runSendEmail(SendNotificationDTO $dto) : bool
     {
         //можно сделать через hanlder
         return DB::transaction(function ($connect) use ($dto) {
             $driver = $dto->driver->value;
+
             //создание list
             $model = $this->EntityNotifyEmail($dto->value);
 
+            //проверяем может ли пользователь повторно отправить код
+            if($this->not_block_send_email($model->id))
+            {
+                //создание кода для отправки (send table)
+                $model = $this->CreateSendEmail(CreateSendDTO::make(
+                    value: $model->value,
+                    driver: $driver,
+                    uuid: $model->id,
+                ));
 
-            //создание кода для отправки (send table)
-            $this->CreateSendEmail(CreateSendDTO::make(
-                value: $model->email,
-                driver: $driver,
-                uuid: $model->id,
-            ));
+                return true;
+            }
 
-            return true;
+            return false;
         });
     }
 
@@ -85,14 +123,20 @@ class InteractorSendNotification
 
             $model = $this->EntityNotifyPhone($dto->value);
 
-            //создание кода для отправки (send table)
-            $this->CreateSendPhone(CreateSendDTO::make(
-                value: $model->email,
-                driver: $driver,
-                uuid: $model->id,
-            ));
+            //проверяем на возможность отправки кода
+            if($this->not_block_send_phone($model->id))
+            {
+                //создание кода для отправки (send table)
+                $this->CreateSendPhone(CreateSendDTO::make(
+                    value: $model->value,
+                    driver: $driver,
+                    uuid: $model->id,
+                ));
 
-            return true;
+                return true;
+            }
+
+            return false;
         });
 
     }

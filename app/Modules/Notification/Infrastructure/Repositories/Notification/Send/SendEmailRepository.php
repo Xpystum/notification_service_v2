@@ -20,7 +20,4 @@ class SendEmailRepository extends CoreRepository //implements IRepository
     {
         return $this->startConditions()->query();
     }
-
-
-
 }

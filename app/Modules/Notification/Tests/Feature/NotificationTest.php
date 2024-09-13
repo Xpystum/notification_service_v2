@@ -108,8 +108,8 @@ class NotificationTest extends TestCase
         ]);
     }
 
-    //Repository Logic Test
-    //P.S Дата в тестах через Carbon::now() работает не парвильно - указывать придётся вручную
+//Repository Logic Test
+        //P.S Дата в тестах через Carbon::now() работает не парвильно - указывать придётся вручную
 
     /**
     * Проверка отправки notification в определённый промежуток времени
@@ -231,7 +231,7 @@ class NotificationTest extends TestCase
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 41, 0));
 
             $repository = new SendEmailRepository();
-            $status = $repository->not_block_send($model->id);
+            $status = $repository->not_block_send($modelList->id);
 
             //Проверяем что мы получили true (вр)
             $this->assertTrue($status);
@@ -242,7 +242,7 @@ class NotificationTest extends TestCase
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 39, 0));
 
             $repository = new SendEmailRepository();
-            $status = $repository->not_block_send($model->id);
+            $status = $repository->not_block_send($modelList->id);
 
             //Проверяем что мы получили false (время подвеждения истекло)
             $this->assertFalse($status);
@@ -279,7 +279,7 @@ class NotificationTest extends TestCase
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 41, 0));
 
             $repository = new SendPhoneRepository();
-            $status = $repository->not_block_send($model->id);
+            $status = $repository->not_block_send($modelList->id);
 
             //Проверяем что мы получили true (вр)
             $this->assertTrue($status);
@@ -290,7 +290,7 @@ class NotificationTest extends TestCase
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 39, 0));
 
             $repository = new SendPhoneRepository();
-            $status = $repository->not_block_send($model->id);
+            $status = $repository->not_block_send($modelList->id);
 
             //Проверяем что мы получили false (время подвеждения истекло)
             $this->assertFalse($status);
@@ -300,6 +300,10 @@ class NotificationTest extends TestCase
         $this->tearDown();
     }
 
+    /**
+    * Проверяем на количество введёных попыток
+    * @return void
+    */
     public function test_countConfirm_email()
     {
         $model = $this->test_createSendEmailTableToDatabase();
@@ -329,6 +333,10 @@ class NotificationTest extends TestCase
 
     }
 
+    /**
+    * Проверяем на количество введёных попыток
+    * @return void
+    */
     public function test_countConfirm_phone()
     {
         $model = $this->test_createSendPhoneTableToDatabase();
