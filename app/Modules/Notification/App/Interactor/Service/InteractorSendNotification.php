@@ -2,6 +2,7 @@
 
 namespace App\Modules\Notification\App\Interactor\Service;
 
+
 use App\Modules\Notification\App\Actions\SendAndConfirm\Send\CreateSendEmailAction;
 use App\Modules\Notification\App\Actions\SendAndConfirm\Send\CreateSendPhoneAction;
 use App\Modules\Notification\App\Data\DTO\Service\CreateSendAction\CreateSendDTO;
@@ -86,8 +87,6 @@ class InteractorSendNotification
     {
         return CreateSendPhoneAction::make($data);
     }
-
-
 
     public function runSendEmail(SendNotificationDTO $dto) : bool
     {

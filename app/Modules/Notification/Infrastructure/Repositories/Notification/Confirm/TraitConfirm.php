@@ -3,6 +3,7 @@
 namespace App\Modules\Notification\Infrastructure\Repositories\Notification\Confirm;
 
 use Exception;
+use Illuminate\Support\Carbon;
 
 trait TraitConfirm
 {
@@ -26,5 +27,40 @@ trait TraitConfirm
                 ->count();
 
         return $countGet >= $count ? false : true;
+    }
+
+     /**
+    * Проверки времени (подтвеждения notification)
+    * @param int $confirmation_time
+    * @param string $uuid
+    *
+    * @return bool Возвращает true, если условие удовлетворяет времени подтверждения (к примеру попадает в рамки 5 минут подтверждения), confirmation_time - берётся из config
+    */
+    public function confirmation_time(string $uuid,int $time = null) : bool
+    {
+        if(is_null($time))
+        {
+            $time = config('notification.confirmation_time');
+            is_null($time) ? throw new Exception('Ошибка получение значение confirmation_time из config notification', 500) : '';
+        }
+
+        $time =  Carbon::now()->subMinutes($time);
+
+
+        // $model = $this->query()
+        //     ->where('uuid_send', $uuid)
+        //     ->latest('id')
+        //     ->first();
+
+        $model = $this->query()
+            ->where('uuid_send', $uuid)
+            ->latest('id')
+            ->first()->send;
+
+
+        if(is_null($model)) { return true; }
+
+        return ($model->created_at >= $time) ? true : false;
+
     }
 }

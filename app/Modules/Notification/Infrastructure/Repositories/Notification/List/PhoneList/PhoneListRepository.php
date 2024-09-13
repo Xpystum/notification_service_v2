@@ -34,5 +34,21 @@ class PhoneListRepository extends CoreRepository //implements IRepository
         return $this->query()->where('value', $uuid)->first();
     }
 
+    /**
+     * Вернуть true, если phone:value существует и равен status:false, иначел вернуть false
+     * @param string $data Телефон
+     *
+     * @return bool
+     */
+    public function getByPhoneStatusFalse(string $data) : bool
+    {
+        $count = $this->query()
+            ->where('value' , $data)
+            ->where('status' , false)
+            ->count();
+
+        return $count ? true : false;
+    }
+
 
 }

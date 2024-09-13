@@ -7,4 +7,5 @@ interface INotificationChannel
 {
 
     public function runNotificationChannel(BaseDTO $dto) : array;
+    public function confirmNotificationChannel(BaseDTO $dto) : array;
 }

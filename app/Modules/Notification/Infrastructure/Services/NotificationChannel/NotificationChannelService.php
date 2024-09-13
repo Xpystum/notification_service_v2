@@ -2,10 +2,10 @@
 
 namespace App\Modules\Notification\Infrastructure\Services\NotificationChannel;
 
-use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmEmailAction;
-use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmPhoneAction;
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm\ConfirmDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
+use App\Modules\Notification\App\Interactor\Service\ConfirmCode\InteractorConfirmNotification;
 use App\Modules\Notification\App\Interactor\Service\InteractorSendNotification;
 use App\Modules\Notification\App\Interface\Service\INotificationChannel;
 use App\Modules\Notification\Infrastructure\Services\Notification\NotificationSendService;
@@ -18,6 +18,7 @@ class NotificationChannelService implements INotificationChannel
 
     public function __construct(
         private NotificationSendService $serviceNotification,
+        private InteractorConfirmNotification $interactorConfirm,
     ) { }
 
 
@@ -34,7 +35,7 @@ class NotificationChannelService implements INotificationChannel
             //объединение логики создание записей в интерактор send+list table
             $interactor = app(InteractorSendNotification::class);
             $status = $interactor->runSendEmail($dto);
-            
+
             if($status)
             {
 
@@ -116,21 +117,25 @@ class NotificationChannelService implements INotificationChannel
     }
 
 
-
     /**
      * Запуск работы нотификации по каналам (SMTP/SMS)
      * @param SendNotificationDTO $dto
      *
      * @return array
-     */
-    public function runNotificationChannel(BaseDTO $dto) : array
+    */     public function runNotificationChannel(BaseDTO $dto) : array
     {
         return $this->InteractorSendNotification($dto);
     }
 
-    public function confirmNotificationChannel(BaseDTO $dto)
+    /**
+     * Запуск работы подтверждения кода
+     * @param ConfirmDTO $dto
+     *
+     * @return array
+    */
+    public function confirmNotificationChannel(BaseDTO $dto) : array
     {
-
+        return $this->interactorConfirm->confirmCode($dto);
     }
 
 }

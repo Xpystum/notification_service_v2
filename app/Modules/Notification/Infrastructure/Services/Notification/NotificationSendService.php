@@ -18,7 +18,7 @@ class NotificationSendService implements INotificationSend
 
     /**
     * Запускает метод нотификации в зависимости от драйвера
-    * @return SendNotificationAction
+    * @return SendNotificationDriverAction
     */
     private function sendNotificationCodeDriver() : SendNotificationDriverAction
     {

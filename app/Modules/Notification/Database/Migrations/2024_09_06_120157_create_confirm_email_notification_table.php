@@ -32,11 +32,12 @@ return new class extends Migration
                 emailList_uuid UUID;
             BEGIN
                 -- Проверяем, существует ли код в таблице send_email_notification
-                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
+                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code AND id = NEW.uuid_send AND created_at >= NEW.created_at) INTO code_exists;
 
                 -- Устанавливаем значение confirm в зависимости от проверки
                 NEW.confirm := code_exists;
 
+                -- обновление статуса если true в таблице email/phone_list
                 IF code_exists THEN
 
                     -- получаем uuid email_list

@@ -40,16 +40,16 @@ class NotificationServisProvider extends ServiceProvider
     private function loadNotificationConfigToDatabase()
     {
         // Проверяем, есть ли кеш, чтобы избежать излишних запросов к базе данных
-        $configCacheKey = 'config_values_notification';
+        // $configCacheKey = 'config_values_notification';
 
-        // Если кеш существует, берем его, иначе получаем значения из базы и сохраняем в кеш
-        $configValues = cache()->remember($configCacheKey, 86400, function () {
-            return ConfigNotification::all();
-        });
+        // // Если кеш существует, берем его, иначе получаем значения из базы и сохраняем в кеш
+        // $configValues = cache()->remember($configCacheKey, 86400, function () {
+        //     return ConfigNotification::all();
+        // });
 
 
-        foreach ($configValues as $configValue) {
-            Config::set('notification.' . $configValue->key, $configValue->value);
-        }
+        // foreach ($configValues as $configValue) {
+        //     Config::set('notification.' . $configValue->key, $configValue->value);
+        // }
     }
 }

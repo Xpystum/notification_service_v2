@@ -28,17 +28,13 @@ class CreateSendPhoneAction
     public function run(CreateSendDTO $data) : Model
     {
         $model = Model::query()
-                ->firstOrCreate(
-
-                    ['value' => $data->value],
-
+                ->create(
                     [
                         'uuid_list' => $data->uuid,
                         'driver' => $data->driver,
                         'value' => $data->value,
                         'code' => code(),
                     ],
-
                 );
 
         return $model;

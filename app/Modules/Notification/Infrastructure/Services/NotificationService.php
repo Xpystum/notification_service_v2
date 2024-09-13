@@ -2,6 +2,7 @@
 namespace App\Modules\Notification\Infrastructure\Services;
 
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
+use App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm\ConfirmDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
 use App\Modules\Notification\App\Interface\Service\INotification;
 use App\Modules\Notification\Infrastructure\Services\NotificationChannel\NotificationChannelService;
@@ -23,8 +24,14 @@ class NotificationService implements INotification
         return $this->serviceNotificationChannel->runNotificationChannel($dto);
     }
 
-    public function confirmNotification(BaseDTO $dto)
+    /**
+     * Подтверждения кода
+     * @param ConfirmDTO $dto
+     *
+     * @return array возваращает массив сообщение + статус
+     */
+    public function confirmNotification(BaseDTO $dto) : array
     {
-
+        return $this->serviceNotificationChannel->confirmNotificationChannel($dto);
     }
 }

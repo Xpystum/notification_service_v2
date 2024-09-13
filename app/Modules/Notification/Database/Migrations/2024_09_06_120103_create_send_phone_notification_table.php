@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained('phone_list', 'id');
 
             $table->string('driver')->comment('Драйвер отправки');
-            $table->string('value')->unique()->comment('Номер телефона');
+            $table->string('value')->comment('Номер телефона');
             $table->integer('code')->index()->comment('Код для подтверждения активации');
             $table->timestamps();
 

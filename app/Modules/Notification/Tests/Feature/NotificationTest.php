@@ -8,6 +8,8 @@ use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmPho
 use App\Modules\Notification\App\Actions\SendAndConfirm\Send\CreateSendEmailAction;
 use App\Modules\Notification\App\Actions\SendAndConfirm\Send\CreateSendPhoneAction;
 use App\Modules\Notification\App\Data\DTO\Service\CreateSendAction\CreateSendDTO;
+use App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm\ConfirmDTO;
+use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
 use App\modules\Notification\App\Models\EmailList;
 use App\modules\Notification\App\Models\PhoneList;
 use App\modules\Notification\App\Models\SendEmail;
@@ -16,6 +18,7 @@ use App\Modules\Notification\Infrastructure\Repositories\Notification\Confirm\Em
 use App\Modules\Notification\Infrastructure\Repositories\Notification\Confirm\PhoneConfirmRepository;
 use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendEmailRepository;
 use App\Modules\Notification\Infrastructure\Repositories\Notification\Send\SendPhoneRepository;
+use App\Modules\Notification\Infrastructure\Services\NotificationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
@@ -130,11 +133,13 @@ class NotificationTest extends TestCase
             uuid : $modelList->id,
         ));
 
+        CreateConfirmEmailAction::make(code(), $model->id);
+
         // Проверяем, что объект $model не равен null
         $this->assertNotNull($model);
 
         {
-            $repository = new SendEmailRepository();
+            $repository = new EmailConfirmRepository();
             $status = $repository->confirmation_time($model->id);
 
             //Проверяем что мы получили true (вр)
@@ -144,7 +149,7 @@ class NotificationTest extends TestCase
         {
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 6, 0));
 
-            $repository = new SendEmailRepository();
+            $repository = new EmailConfirmRepository();
             $status = $repository->confirmation_time($model->id);
 
             //Проверяем что мы получили false (время подвеждения истекло)
@@ -177,11 +182,13 @@ class NotificationTest extends TestCase
             uuid : $modelList->id,
         ));
 
+        CreateConfirmPhoneAction::make(code(), $model->id);
+
         // Проверяем, что объект $model не равен null
         $this->assertNotNull($model);
 
         {
-            $repository = new SendPhoneRepository();
+            $repository = new PhoneConfirmRepository();
             $status = $repository->confirmation_time($model->id);
 
             //Проверяем что мы получили true (вр)
@@ -192,7 +199,7 @@ class NotificationTest extends TestCase
         {
             Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 6, 0));
 
-            $repository = new SendPhoneRepository();
+            $repository = new PhoneConfirmRepository();
             $status = $repository->confirmation_time($model->id);
 
             //Проверяем что мы получили false (время подвеждения истекло)
@@ -364,6 +371,147 @@ class NotificationTest extends TestCase
             $this->assertFalse($status);
         }
 
+    }
+
+    public function test_sendNotificationEmail()
+    {
+        $server = app(NotificationService::class);
+        $status = $server->runNotification(SendNotificationDTO::make('smtp', 'test@mail.ru'));
+        $this->assertNotNull($status);
+
+        // $this->arrayHasKey()
+    }
+
+    /**
+    * Проверка работоспособности отправки кода и проверка времени подтверждения => в течении 5 минут
+    * @return void
+    */
+    public function test_confirmNotificationEmail_timeConfirmation()
+    {
+        $service = app(NotificationService::class);
+
+        {
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 30, 0));
+            $model = $this->test_createSendEmailTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make($model->code, $model->id, 'email'));
+
+            $this->assertEquals([
+                "message" => "Код успешно подтверждён.",
+                "status" => true,
+            ], $arrayResult);
+
+        }
+
+
+        {
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 40, 0));
+            $model = $this->test_createSendEmailTableToDatabase();
+
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 46, 0));
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make(code(), $model->id, 'email'));
+
+            $this->assertEquals([
+                "message" => "Истекло время подтверждения кода.",
+                "status" => false,
+            ], $arrayResult);
+        }
+
+
+        $this->tearDown();
+    }
+
+    /**
+     * Проверка работоспособности отправки кода и проверка времени подтверждения => в течении 5 минут
+     * @return void
+     */
+    public function test_confirmNotificationPhone_timeConfirmation()
+    {
+
+        $service = app(NotificationService::class);
+        {
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 30, 0));
+            $model = $this->test_createSendPhoneTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make($model->code, $model->id, 'phone'));
+
+            $this->assertEquals([
+                "message" => "Код успешно подтверждён.",
+                "status" => true,
+            ], $arrayResult);
+        }
+
+        {
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 40, 0));
+            $model = $this->test_createSendPhoneTableToDatabase();
+
+            Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 46, 0));
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make(code(), $model->id, 'phone'));
+
+
+            $this->assertEquals([
+                "message" => "Истекло время подтверждения кода.",
+                "status" => false,
+            ], $arrayResult);
+        }
+
+        $this->tearDown();
+    }
+
+    public function test_confirmation_code_email()
+    {
+        $service = app(NotificationService::class);
+        Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 30, 0));
+
+        {
+            $model = $this->test_createSendEmailTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make('123456', $model->id, 'email'));
+
+            $this->assertEquals([
+                "message" => "Код подтверждения неверный.",
+                "status" => false,
+            ], $arrayResult);
+        }
+
+        {
+            $model = $this->test_createSendEmailTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make($model->code, $model->id, 'email'));
+
+
+            $this->assertEquals([
+                "message" => "Код успешно подтверждён.",
+                "status" => true,
+            ], $arrayResult);
+        }
+
+        $this->tearDown();
+    }
+
+    public function test_confirmation_code_phone()
+    {
+        $service = app(NotificationService::class);
+        Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 30, 0));
+
+        {
+            $model = $this->test_createSendPhoneTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make('123456', $model->id, 'phone'));
+
+            $this->assertEquals([
+                "message" => "Код подтверждения неверный.",
+                "status" => false,
+            ], $arrayResult);
+        }
+
+        {
+            $model = $this->test_createSendPhoneTableToDatabase();
+            $arrayResult = $service->confirmNotification(ConfirmDTO::make($model->code, $model->id, 'phone'));
+
+
+            $this->assertEquals([
+                "message" => "Код успешно подтверждён.",
+                "status" => true,
+            ], $arrayResult);
+        }
+
+        $this->tearDown();
     }
 
     public function tearDown(): void
