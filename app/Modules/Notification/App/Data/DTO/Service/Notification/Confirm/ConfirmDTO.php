@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm;
 
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;

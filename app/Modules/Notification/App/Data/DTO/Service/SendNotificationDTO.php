@@ -4,7 +4,7 @@ namespace App\Modules\Notification\App\Data\DTO\Service;
 
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
 use App\Modules\Notification\App\Data\Enums\NotificationDriverEnum;
-use App\Modules\Notification\App\Rule\PhoneNumber;
+use App\Modules\Notification\Domain\Rule\PhoneNumber;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;

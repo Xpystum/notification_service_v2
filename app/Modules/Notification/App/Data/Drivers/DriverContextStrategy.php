@@ -2,7 +2,7 @@
 namespace App\Modules\Notification\App\Data\Drivers;
 
 use App\Modules\Notification\App\Data\DTO\Base\BaseDTO;
-use App\Modules\Notification\App\Interface\NotificationDriverInterface;
+use App\Modules\Notification\Domain\Interface\NotificationDriverInterface;
 
 class DriverContextStrategy
 {
