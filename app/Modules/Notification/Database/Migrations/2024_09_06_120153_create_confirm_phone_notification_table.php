@@ -23,63 +23,45 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Создание функции для триггера
-        DB::unprepared("
-            CREATE OR REPLACE FUNCTION check_phone_code_exists() -- устанавливаем функцию, или перезаписываем если существует
+         //Создание функции для триггера
+         DB::unprepared(
+            "CREATE OR REPLACE FUNCTION check_phone_code_exists() -- устанавливаем функцию, или перезаписываем если существует
             RETURNS TRIGGER AS $$
             DECLARE
                 code_exists BOOLEAN; -- декларируем переменную
+                phoneList_uuid UUID;
             BEGIN
                 -- Проверяем, существует ли код в таблице send_phone_notification
-                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code) INTO code_exists;
+                SELECT EXISTS (SELECT 1 FROM send_phone_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
 
                 -- Устанавливаем значение confirm в зависимости от проверки
                 NEW.confirm := code_exists;
 
+                IF code_exists THEN
+                    -- получаем uuid phone_list
+                    SELECT uuid_list
+                    INTO phoneList_uuid
+                    FROM send_email_notification
+                    WHERE code = NEW.code AND id = NEW.uuid_send
+                    LIMIT 1;
+
+                    UPDATE phone_list
+                    SET status = true
+                    WHERE id = phoneList_uuid;
+                END IF;
+
                 RETURN NEW;
             END;
-            $$ LANGUAGE plpgsql;
-        ");
-
-         //Создание функции для триггера
-         DB::unprepared("
-         CREATE OR REPLACE FUNCTION check_phone_code_exists() -- устанавливаем функцию, или перезаписываем если существует
-         RETURNS TRIGGER AS $$
-         DECLARE
-            code_exists BOOLEAN; -- декларируем переменную
-            phoneList_uuid UUID;
-         BEGIN
-            -- Проверяем, существует ли код в таблице send_phone_notification
-            SELECT EXISTS (SELECT 1 FROM send_phone_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
-
-            -- Устанавливаем значение confirm в зависимости от проверки
-            NEW.confirm := code_exists;
-
-            IF code_exists THEN
-                -- получаем uuid phone_list
-                SELECT uuid_list
-                INTO phoneList_uuid
-                FROM send_email_notification
-                WHERE code = NEW.code AND id = NEW.uuid_send
-                LIMIT 1;
-
-                UPDATE phone_list
-                SET status = true
-                WHERE id = phoneList_uuid;
-            END IF;
-
-            RETURN NEW;
-         END;
-         $$ LANGUAGE plpgsql;
-     ");
+            $$ LANGUAGE plpgsql;"
+        );
 
         // Создание триггера
-        DB::unprepared("
-            CREATE TRIGGER before_insert_confirm_phone
+        DB::unprepared(
+            "CREATE TRIGGER before_insert_confirm_phone
             BEFORE INSERT ON confirm_phone_notification
             FOR EACH ROW
-            EXECUTE FUNCTION check_phone_code_exists();
-        ");
+            EXECUTE FUNCTION check_phone_code_exists();"
+        );
     }
 
     /**

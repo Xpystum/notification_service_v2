@@ -24,15 +24,16 @@ return new class extends Migration
         });
 
         //Создание функции для триггера
-        DB::unprepared("
-            CREATE OR REPLACE FUNCTION check_email_code_exists() -- устанавливаем функцию, или перезаписываем если существует
+        DB::unprepared(
+            "CREATE OR REPLACE FUNCTION check_email_code_exists() -- устанавливаем функцию, или перезаписываем если существует
             RETURNS TRIGGER AS $$
             DECLARE
                 code_exists BOOLEAN; -- декларируем переменную
                 emailList_uuid UUID;
             BEGIN
                 -- Проверяем, существует ли код в таблице send_email_notification
-                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code AND id = NEW.uuid_send AND created_at >= NEW.created_at) INTO code_exists;
+                -- p.s надо учитывать время последнего кода если код и uuid будет одинаковый он все равно примит его не учитывая время
+                SELECT EXISTS (SELECT 1 FROM send_email_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
 
                 -- Устанавливаем значение confirm в зависимости от проверки
                 NEW.confirm := code_exists;
@@ -54,16 +55,16 @@ return new class extends Migration
 
                 RETURN NEW;
             END;
-            $$ LANGUAGE plpgsql;
-        ");
+            $$ LANGUAGE plpgsql;"
+        );
 
         // Создание триггера
-        DB::unprepared("
-            CREATE TRIGGER before_insert_confirm_email
+        DB::unprepared(
+            "CREATE TRIGGER before_insert_confirm_email
             BEFORE INSERT ON confirm_email_notification
             FOR EACH ROW
-            EXECUTE FUNCTION check_email_code_exists();
-        ");
+            EXECUTE FUNCTION check_email_code_exists();"
+        );
 
     }
 

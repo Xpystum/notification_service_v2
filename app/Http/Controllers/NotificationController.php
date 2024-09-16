@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmEmailAction;
+use App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm\ConfirmDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
 use App\Modules\Notification\App\Interactor\Service\InteractorSendNotification;
 use App\modules\Notification\App\Models\ConfigNotification;
@@ -16,13 +17,18 @@ class NotificationController extends Controller
     public function __invoke(NotificationService $serv, InteractorSendNotification $inter)
     {
 
-        // $ac =  $serv->runNotification(SendNotificationDTO::make('aero', '79200264425'));
 
-        $status = $inter->runSendEmail(SendNotificationDTO::make('smtp', 'test@mail.ru'));
-        $sb = CreateConfirmEmailAction::make(123456, '9d00abac-2c93-445d-a4e1-f43a9b7bf7bc');
+        // $status = $serv->runNotification(SendNotificationDTO::make('smtp', 'test@gmail.com'));
+        // dd($status);
 
-        // $ab = CreateSendEmailAction::make('test@gmail.com', 'smtp');
-        // CreateSendEmailAction::make()
+        $status = $serv->confirmNotification(ConfirmDTO::make(168169, '9d05e652-b876-4857-9ced-579d84a8a59d', 'email'));
+        dd($status);
+
+        // $status = $serv->runNotification(SendNotificationDTO::make('aero', '79200264425'));
+        // dd($status);
+
+        // $status = $serv->confirmNotification(ConfirmDTO::make(452675, '9d05e52d-e0be-483a-a803-a6b4ff52feb6', 'phone'));
+        // dd($status);
 
     }
 }

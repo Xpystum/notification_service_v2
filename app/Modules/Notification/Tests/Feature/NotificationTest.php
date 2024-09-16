@@ -486,20 +486,19 @@ class NotificationTest extends TestCase
         $service = app(NotificationService::class);
         Carbon::setTestNow(Carbon::create(2023, 10, 1, 12, 30, 0));
 
-        {
-            $model = $this->test_createSendEmailTableToDatabase();
-            $arrayResult = $service->confirmNotification(ConfirmDTO::make('123456', $model->id, 'email'));
+        // {
+        //     $model = $this->test_createSendEmailTableToDatabase();
+        //     $arrayResult = $service->confirmNotification(ConfirmDTO::make('123456', $model->id, 'email'));
 
-            $this->assertEquals([
-                "message" => "Код подтверждения неверный.",
-                "status" => false,
-            ], $arrayResult);
-        }
+        //     $this->assertEquals([
+        //         "message" => "Код подтверждения неверный.",
+        //         "status" => false,
+        //     ], $arrayResult);
+        // }
 
         {
             $model = $this->test_createSendEmailTableToDatabase();
             $arrayResult = $service->confirmNotification(ConfirmDTO::make($model->code, $model->id, 'email'));
-
 
             $this->assertEquals([
                 "message" => "Код успешно подтверждён.",

@@ -18,6 +18,13 @@ class ConfirmDTO extends BaseDTO
 
     }
 
+    /**
+     * @param int $code
+     * @param string $uuid
+     * @param string $type phone/email
+     *
+     * @return self
+     */
     public static function make(int $code, string $uuid, string $type) : self
     {
         return new self(
