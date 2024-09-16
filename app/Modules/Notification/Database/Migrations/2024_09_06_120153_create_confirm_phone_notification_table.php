@@ -32,6 +32,7 @@ return new class extends Migration
                 phoneList_uuid UUID;
             BEGIN
                 -- Проверяем, существует ли код в таблице send_phone_notification
+                -- p.s надо учитывать время последнего кода если код и uuid будет одинаковый он все равно примит его не учитывая время
                 SELECT EXISTS (SELECT 1 FROM send_phone_notification WHERE code = NEW.code AND id = NEW.uuid_send) INTO code_exists;
 
                 -- Устанавливаем значение confirm в зависимости от проверки
