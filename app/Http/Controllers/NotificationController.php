@@ -2,26 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Modules\Notification\App\Actions\SendAndConfirm\Confirm\CreateConfirmEmailAction;
 use App\Modules\Notification\App\Data\DTO\Service\Notification\Confirm\ConfirmDTO;
 use App\Modules\Notification\App\Data\DTO\Service\SendNotificationDTO;
-use App\Modules\Notification\App\Interactor\Service\InteractorSendNotification;
-use App\modules\Notification\App\Models\ConfigNotification;
-use App\Modules\Notification\Infrastructure\Services\NotificationService;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
+use App\Modules\Notification\Domain\Services\Notification\NotificationService;
 
 class NotificationController extends Controller
 {
-    public function __invoke(NotificationService $serv, InteractorSendNotification $inter)
+    public function __invoke(NotificationService $serv)
     {
-
 
         // $status = $serv->runNotification(SendNotificationDTO::make('smtp', 'test@gmail.com'));
         // dd($status);
 
-        $status = $serv->confirmNotification(ConfirmDTO::make(168169, '9d05e652-b876-4857-9ced-579d84a8a59d', 'email'));
+        $status = $serv->confirmNotification(ConfirmDTO::make(806702, '9d065862-ff16-43c5-b0e3-7ae0a788c721', 'email'));
         dd($status);
 
         // $status = $serv->runNotification(SendNotificationDTO::make('aero', '79200264425'));

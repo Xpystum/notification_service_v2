@@ -9,21 +9,18 @@ class NotificationServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            app_path('Modules\Notification\Config\notification.php'), 'notification'
+            app_path('Modules\Notification\Common\Config\notification.php'), 'notification'
         );
     }
 
     public function boot(): void
     {
-
+        //P.S На проде проверить это!
         if($this->app->runningInConsole()){
-
-            $this->loadMigrationsFrom(dirname(__DIR__) . '/..' . '/..' . '/..' . 'Common' . '/Database' . '/Migrations');
-
+            $this->loadMigrationsFrom(dirname(__DIR__) . '/..' . '/..' . '/Common' . '/Database' . '/Migrations');
         }
 
         $this->loadNotificationConfigToDatabase();
-
     }
 
     /**
